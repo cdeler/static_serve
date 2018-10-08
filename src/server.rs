@@ -3,7 +3,7 @@ use tokio::io;
 use tokio::net::TcpListener;
 use tokio::prelude::*;
 
-pub fn run_server(host: String, port: u16) {
+pub fn run_server(host: String, port: u16, _dirname: String) {
     let ip_addr: IpAddr = host.parse().expect("Cannot parse ip address");
 
     let socket = SocketAddr::new(ip_addr, port);

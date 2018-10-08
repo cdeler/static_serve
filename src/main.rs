@@ -11,11 +11,11 @@ const DEFAULT_HOST: &'static str = "0.0.0.0";
 
 fn usage(opts: &Options, args: &Vec<String>) {
     let executable = args[0].clone();
-    let brief = format!("Usage: {} [-h host] -p PORT", executable);
+    let brief = format!("Usage: {} [-h host] -p PORT -d DIRNAME", executable);
     print!("{}", opts.usage(&brief));
 }
 
-fn parse_args(matches: Matches) -> Result<(String, u16), String> {
+fn parse_args(matches: Matches) -> Result<(String, u16, String), String> {
     let host: String = match matches.opt_str("h") {
         Some(x) => x,
         None => String::from(DEFAULT_HOST),
@@ -37,7 +37,14 @@ fn parse_args(matches: Matches) -> Result<(String, u16), String> {
         }
     };
 
-    Ok((host, port))
+    let dirname: String = match matches.opt_str("d") {
+        Some(val) => val,
+        None => {
+            return Err(String::from("You must set the directory name"));
+        }
+    };
+
+    Ok((host, port, dirname))
 }
 
 fn main() {
@@ -45,7 +52,8 @@ fn main() {
 
     let mut opts = Options::new();
     opts.optopt("h", "host", "socket host", "HOST")
-        .optopt("p", "port", "port number", "PORT");
+        .optopt("p", "port", "port number", "PORT")
+        .optopt("d", "dir", "directory name", "DIRNAME");
 
     let matches = match opts.parse(&args[1..]) {
         Ok(val) => val,
@@ -56,7 +64,7 @@ fn main() {
         }
     };
 
-    let (host, port) = match parse_args(matches) {
+    let (host, port, dirname) = match parse_args(matches) {
         Ok(val) => val,
         Err(msg) => {
             eprintln!("Cannot parse args due to error: {}", msg);
@@ -65,5 +73,5 @@ fn main() {
         }
     };
 
-    server::run_server(host, port);
+    server::run_server(host, port, dirname);
 }
