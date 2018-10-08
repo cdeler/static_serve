@@ -1,0 +1,8 @@
+[package]
+name = "static_serve"
+version = "0.1.0"
+authors = ["cdeler <serj.krotov@gmail.com>"]
+
+[dependencies]
+getopts = "0.2"
+tokio = "0.1"
