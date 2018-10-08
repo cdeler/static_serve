@@ -1,5 +1,6 @@
 extern crate getopts;
-extern crate tokio;
+extern crate http;
+extern crate httparse;
 
 mod server;
 
